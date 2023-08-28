@@ -1,0 +1,20 @@
+.display {
+	position: absolute;
+	bottom: 10%;
+	right: 13%;
+	padding: 10px;
+	background: rgba(0, 0, 0, 0.5);
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.2) inset;
+	width: 130px;
+	height: 120px;
+	border-radius: 7px;
+	transform-origin: bottom right;
+	.variable {
+			position: relative;
+			top: 25px;
+			width: 50;
+			height: 50;
+			font-size: 15px;
+			left: auto;
+	}
+}

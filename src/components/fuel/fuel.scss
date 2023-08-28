@@ -1,0 +1,79 @@
+.fuel {
+	position: absolute;
+	height: 65px;
+	width: 240px;
+	bottom: 5%;
+	right: 20%;
+	.fuelRemaining {
+		position: absolute;
+		top: 0px;
+		width: 50;
+		height: 50;
+		font-size: 14px;
+		left: auto;
+		-webkit-text-stroke: 0.2px #100;
+	}
+	.fuelEstimated {
+		position: absolute;
+		top: 0px;
+		width: 50;
+		height: 50;
+		font-size: 14px;
+		right: 0;
+		-webkit-text-stroke: 0.2px #100;
+	}
+	.fuelPerLap {
+		position: absolute;
+		top: 14px;
+		width: 50;
+		height: 50;
+		font-size: 14px;
+		left: auto;
+		-webkit-text-stroke: 0.2px #100;
+	}
+	.fuelLastLap {
+		position: absolute;
+		top: 14px;
+		width: 50;
+		height: 50;
+		font-size: 14px;
+		right: 0;
+		-webkit-text-stroke: 0.2px #100;
+	}
+	.lapsLeft {
+		position: absolute;
+		top: 30px;
+		width: 50;
+		height: 50;
+		font-size: 14px;
+		left: auto;
+		-webkit-text-stroke: 0.2px #100;
+	}
+	.lapsEstimated {
+		position: absolute;
+		top: 30px;
+		width: 50;
+		height: 50;
+		font-size: 14px;
+		right: 0;
+		-webkit-text-stroke: 0.2px #100;
+	}
+	.timeLeft {
+		position: absolute;
+		top: 45px;
+		width: 50;
+		height: 50;
+		font-size: 14px;
+		left: auto;
+		-webkit-text-stroke: 0.2px #100;
+	}
+	.delta {
+		position: absolute;
+		top: 45px;
+		width: 50;
+		height: 50;
+		font-size: 14px;
+		right: 0;
+		-webkit-text-stroke: 0.2px #100;
+	}
+}

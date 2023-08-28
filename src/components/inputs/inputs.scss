@@ -1,0 +1,56 @@
+.inputs {
+	padding: 5px;
+	height: 130px;
+	position: absolute;
+	bottom: 5%;
+	left: 1690px;
+	margin-right: 70px;
+	border-radius: 5px;
+	width: 70px;
+	.barContainer {
+		background: rgba(0, 0, 0, 0.5);
+		height: 120%;
+		margin: 0.5px;
+		width: 15px;
+		display: inline-block;
+		position: relative;
+		border-radius: 5px;
+		.bar {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			border-radius: 4px;
+			border-left: 1px solid #100;
+			border-right: 1px solid #100;
+		}
+		.clutchPedal {
+			background: #aaa;
+		}
+		.brakePedal {
+			background: red;
+		}
+		.throttlePedal {
+			background: green;
+		}
+	}
+	&.hasWheel {
+		height: 60px;
+		.steeringWheel {
+			position: absolute;
+			top: 110%;
+			left: 17%;
+			transform-origin: 19px 19px;
+			margin-top: 5px;
+			background: rgba(0, 0, 0, 0.5);
+			border-radius: 100%;
+
+			svg {
+				margin: -4px -4px -5px;
+				transform-origin: top left;
+				width: 46px;
+				fill: rgb(255, 255, 255);
+			}
+		}
+	}
+}

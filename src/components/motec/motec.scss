@@ -1,0 +1,72 @@
+.motec {
+	display: none;
+	&.shouldShow {
+		display: block;
+	}
+	position: absolute;
+	bottom: 0.8%;
+	right: 2%;
+	padding: 10px;
+	width: 130px;
+	height: 120px;
+	border-radius: 7px;
+	transform-origin: bottom right;
+	.speed {
+		position: absolute;
+		font-size: 40px;
+		bottom: 0px;
+		left: 50%;
+		transform: translate(-50%, 0);
+		-webkit-text-stroke: 0.5px #100;
+		.speedMetric {
+			position: relative;
+			left: 100%;
+			bottom: 20px;
+			-webkit-text-stroke: 0.2px #100;
+			font-size: 18px;
+		}
+	}
+	.rpm {
+		position: absolute;
+		bottom: 3px;
+		left: 10px;
+		right: 0px;
+		background: #222;
+		border-radius: 5px;
+
+		.rpmBar {
+			background: #68aabe;
+			height: 7px;
+			border-radius: 2px;
+		}
+	}
+	&.rpmOptimum {
+		.rpm .rpmBar {
+			background: green;
+		}
+		.gear {
+			background-color: green;
+		}
+	}
+	&.rmpMaxed {
+		.rpm .rpmBar {
+			background: #fe0000;
+		}
+		.gear {
+			background-color: #fe0000;
+		}
+	}
+	.gear {
+		font-size: 55px;
+		position: absolute;
+		left: 50%;
+		transform: translate(-50%, 0);
+		top: 2px;
+		line-height: 1;
+		background-color:	#68aabe;
+		border-radius: 2px;
+		color: #202020;
+		width: 50px;
+		text-align: center;
+	}
+}

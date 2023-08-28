@@ -1,0 +1,75 @@
+.rake {
+	position: absolute;
+	bottom: 1%;
+	right: 35%;
+	padding: 10px;
+	width: 130px;
+	height: 120px;
+	border-radius: 7px;
+	transform-origin: bottom right;
+	.rakeangle {
+		position: absolute;
+		bottom: 10px;
+		width: 10;
+		height: 50;
+		font-size: 20px;
+		right: 10px;
+ 	}
+	.frontleft {
+		position: absolute;
+		top: 5px;
+		width: 10;
+		height: 50;
+		font-size: 17px;
+		left: auto;
+		-webkit-text-stroke: 0.5px #100;
+	}
+	.frontright {
+		position: absolute;
+		top: 5px;
+		width: 10;
+		height: 50;
+		font-size: 17px;
+		right: 10px;
+		-webkit-text-stroke: 0.5px #100;
+	}
+	.rearleft {
+		position: absolute;
+		bottom: 10px;
+		width: 10;
+		height: 50;
+		font-size: 17px;
+		left: auto;
+		-webkit-text-stroke: 0.5px #100;
+	}
+	.rearright {
+		position: absolute;
+		bottom: 10px;
+		width: 10;
+		height: 50;
+		font-size: 17px;
+		right: 10px;
+		-webkit-text-stroke: 0.5px #100;
+	}
+	.rakenumber {
+		position: absolute;
+		width: 50;
+		height: 50;
+		top: 70px;
+		left: 46px;
+		font-size: 20px;
+		transform-origin: center right;
+		-webkit-text-stroke: 0.5px #100;
+		.rakesvg {
+			position: absolute;
+			transform-origin: center bottom;
+			top: -30px;
+			left: -20px;
+			svg {
+				margin: -4px -4px -5px;
+				width: 100px;
+				fill: rgb(255, 255, 255);
+			}
+		}
+	}
+}
