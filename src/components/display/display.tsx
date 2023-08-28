@@ -71,6 +71,7 @@ export default class Display extends React.Component<IProps, {}> {
 			>
 				{/* Speed*/}
 				<div className="variable">
+					{('w')}
 					<p>{
 					this.lastLapTime
 					}</p>
