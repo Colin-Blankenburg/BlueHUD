@@ -34,6 +34,9 @@ export default class Motec extends React.Component<IProps, {}> {
 	@observable
 	gear = 0;
 
+	@observable
+	pitLimiter = 0;
+
 	gearNameLookup = {};
 
 	constructor(props: IProps) {
@@ -64,6 +67,7 @@ export default class Motec extends React.Component<IProps, {}> {
 	@action
 	private update = () => {
 		this.speed = r3e.data.CarSpeed;
+		this.pitLimiter = r3e.data.PitLimiter;
 		this.rpm = rpsToRpm(r3e.data.EngineRps);
 		this.maxRpm = rpsToRpm(r3e.data.MaxEngineRps);
 		this.upshiftRps = rpsToRpm(r3e.data.UpshiftRps);
@@ -79,6 +83,7 @@ export default class Motec extends React.Component<IProps, {}> {
 				className={classNames(style.motec, this.props.className, {
 					rmpMaxed,
 					rpmOptimum,
+					pitLimiterOn: this.pitLimiter === 1,
 					shouldShow: this.speed !== INVALID
 				})}
 			>

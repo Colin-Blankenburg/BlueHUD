@@ -37,8 +37,9 @@
 				}
 			}
 			&.broken {
+				color: red;
 				.barContainer .bar {
-					color: red;
+					background: red;
 				}
 			}
 		}

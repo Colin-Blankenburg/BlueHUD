@@ -150,7 +150,7 @@ export default class Fuel extends React.Component<IProps, {}> {
 						</div>
 						<div className="fuelEstimated">
 							{('Fuel Est: ')}
-							{this.fuelEstimated.toFixed(1)}
+							{this.lapsToFinish() >= 0 ? this.fuelEstimated.toFixed(1) : '--'}
 							{('L')}
 						</div>
 						<div className="lapsLeft">
@@ -160,7 +160,7 @@ export default class Fuel extends React.Component<IProps, {}> {
 						</div>
 						<div className="lapsEstimated">
 							{('Laps Est: ')}
-							{this.lapsToFinish().toFixed(2)}
+							{this.lapsToFinish() >= 0 ? this.lapsToFinish().toFixed(2) : '--'}
 							{(' laps')}
 						</div>
 						<div className="timeLeft">
@@ -168,9 +168,14 @@ export default class Fuel extends React.Component<IProps, {}> {
 							{r3e.data.LapTimeBestSelf === -1 ? '--:--.-' :
 							 formatTime(this.fuelTimeLeft, this.format)}
 						</div>
-						<div className="delta">
+						<div
+							 className={classNames('delta', {
+								deltaBad: this.delta > 0,
+								deltaGood: this.delta < 0
+							})}
+						>
 							{('Delta: ')}
-							{this.delta.toFixed(2)}
+							{this.lapsToFinish() >= 0 ? this.delta.toFixed(2) : '--'}
 							{('L')}
 						</div>
 					</div>

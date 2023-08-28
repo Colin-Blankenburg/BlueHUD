@@ -8,6 +8,8 @@ declare const styles: {
   readonly "lapsEstimated": string;
   readonly "timeLeft": string;
   readonly "delta": string;
+  readonly "deltaBad": string;
+  readonly "deltaGood": string;
 };
 export = styles;
 

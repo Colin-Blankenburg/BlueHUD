@@ -4,6 +4,7 @@
 	width: 240px;
 	bottom: 5%;
 	right: 20%;
+	// this does not work for some reason, TBC
 	.fuelRemaining {
 		position: absolute;
 		top: 0px;
@@ -24,7 +25,7 @@
 	}
 	.fuelPerLap {
 		position: absolute;
-		top: 14px;
+		top: 15px;
 		width: 50;
 		height: 50;
 		font-size: 14px;
@@ -33,7 +34,7 @@
 	}
 	.fuelLastLap {
 		position: absolute;
-		top: 14px;
+		top: 15px;
 		width: 50;
 		height: 50;
 		font-size: 14px;
@@ -75,5 +76,15 @@
 		font-size: 14px;
 		right: 0;
 		-webkit-text-stroke: 0.2px #100;
+	}
+	& .deltaBad {
+		.delta {
+		-webkit-text-stroke: 0.5px #ff3333;
+		}
+	}
+	& .deltaGood {
+		.delta {
+		-webkit-text-stroke: 0.5px #33ff33;
+		}
 	}
 }

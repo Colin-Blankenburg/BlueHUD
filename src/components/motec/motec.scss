@@ -11,6 +11,12 @@
 	height: 120px;
 	border-radius: 7px;
 	transform-origin: bottom right;
+	&.pitLimiterOn {
+		color: red;
+		.gear {
+			background-color: red;
+		}
+	}
 	.speed {
 		position: absolute;
 		font-size: 40px;
@@ -25,6 +31,7 @@
 			-webkit-text-stroke: 0.2px #100;
 			font-size: 18px;
 		}
+
 	}
 	.rpm {
 		position: absolute;

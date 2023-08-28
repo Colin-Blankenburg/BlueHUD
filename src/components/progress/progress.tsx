@@ -392,22 +392,25 @@ export default class Progress extends React.Component<IProps, {}> {
 						/>
 					</div>
 					<div className="sector1Data">
-						{this.sectorTimesCurrentSelf.Sector1 === -1 ?
-						'--' : this.sectorTimesCurrentSelf.Sector1 > 60 ?
-						formatTime(this.sectorTimesCurrentSelf.Sector1, 'm:s.S') :
+						{this.sectorTimesCurrentSelf.Sector1 <= 0 ?
+						'' : this.sectorTimesCurrentSelf.Sector1 > 60 ?
+						formatTime(this.sectorTimesCurrentSelf.Sector1, 'm:ss.S') :
 						formatTime(this.sectorTimesCurrentSelf.Sector1, 's.S')}
+						{this.sectorTimesCurrentSelf.Sector1 <= 0 ? '' : 's'}
 					</div>
 					<div className="sector2Data">
-						{this.sectorTimesCurrentSelf.Sector2 === -1 ?
-						'--' : this.sectorTimesCurrentSelf.Sector2 > 60 ?
-						formatTime(this.sectorTimesCurrentSelf.Sector2, 'm:s.S') :
+						{this.sectorTimesCurrentSelf.Sector2 <= 0 ?
+						'' : this.sectorTimesCurrentSelf.Sector2 > 60 ?
+						formatTime(this.sectorTimesCurrentSelf.Sector2, 'm:ss.S') :
 						formatTime(this.sectorTimesCurrentSelf.Sector2, 's.S')}
+						{this.sectorTimesCurrentSelf.Sector2 <= 0 ? '' : 's'}
 					</div>
 					<div className="sector3Data">
-						{this.sectorTimesCurrentSelf.Sector3 === -1 ?
-						'--' : this.sectorTimesCurrentSelf.Sector3 > 60 ?
-						formatTime(this.sectorTimesCurrentSelf.Sector3, 'm:s.S') :
+						{this.sectorTimesCurrentSelf.Sector3 <= 0 ?
+						'' : this.sectorTimesCurrentSelf.Sector3 > 60 ?
+						formatTime(this.sectorTimesCurrentSelf.Sector3, 'm:ss.S') :
 						formatTime(this.sectorTimesCurrentSelf.Sector3, 's.S')}
+						{this.sectorTimesCurrentSelf.Sector3 <= 0 ? '' : 's'}
 					</div>
 				</div>
 			</div>
