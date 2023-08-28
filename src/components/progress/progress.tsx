@@ -161,8 +161,6 @@ export default class Progress extends React.Component<IProps, {}> {
 		this.sectorTimesBestSelf = r3e.data.SectorTimesBestSelf;
 		this.lapTimeCurrentSelf = r3e.data.LapTimeCurrentSelf;
 		this.sectorTimesCurrentSelf = r3e.data.SectorTimesCurrentSelf;
-		this.sectorTimesCurrentSelf.Sector3 -= this.sectorTimesCurrentSelf.Sector2;
-		this.sectorTimesCurrentSelf.Sector2 -= this.sectorTimesCurrentSelf.Sector1;
 
 		const shouldReset =
 			this.lastSessionType !== null &&
@@ -399,18 +397,28 @@ export default class Progress extends React.Component<IProps, {}> {
 						{this.sectorTimesCurrentSelf.Sector1 <= 0 ? '' : 's'}
 					</div>
 					<div className="sector2Data">
-						{this.sectorTimesCurrentSelf.Sector2 <= 0 ?
-						'' : this.sectorTimesCurrentSelf.Sector2 > 60 ?
-						formatTime(this.sectorTimesCurrentSelf.Sector2, 'm:ss.S') :
-						formatTime(this.sectorTimesCurrentSelf.Sector2, 's.S')}
-						{this.sectorTimesCurrentSelf.Sector2 <= 0 ? '' : 's'}
+						{this.sectorTimesCurrentSelf.Sector2 -
+						 this.sectorTimesCurrentSelf.Sector1 <= 0 ?
+						'' : this.sectorTimesCurrentSelf.Sector2 -
+						this.sectorTimesCurrentSelf.Sector1 > 60 ?
+						formatTime(this.sectorTimesCurrentSelf.Sector2 -
+							this.sectorTimesCurrentSelf.Sector1, 'm:ss.S') :
+						formatTime(this.sectorTimesCurrentSelf.Sector2 -
+							this.sectorTimesCurrentSelf.Sector1, 's.S')}
+						{this.sectorTimesCurrentSelf.Sector2 -
+						 this.sectorTimesCurrentSelf.Sector1 <= 0 ? '' : 's'}
 					</div>
 					<div className="sector3Data">
-						{this.sectorTimesCurrentSelf.Sector3 <= 0 ?
-						'' : this.sectorTimesCurrentSelf.Sector3 > 60 ?
-						formatTime(this.sectorTimesCurrentSelf.Sector3, 'm:ss.S') :
-						formatTime(this.sectorTimesCurrentSelf.Sector3, 's.S')}
-						{this.sectorTimesCurrentSelf.Sector3 <= 0 ? '' : 's'}
+						{this.sectorTimesCurrentSelf.Sector3 -
+						 this.sectorTimesCurrentSelf.Sector2 <= 0 ?
+						'' : this.sectorTimesCurrentSelf.Sector3 -
+						this.sectorTimesCurrentSelf.Sector2 > 60 ?
+						formatTime(this.sectorTimesCurrentSelf.Sector3 -
+							this.sectorTimesCurrentSelf.Sector2, 'm:ss.S') :
+						formatTime(this.sectorTimesCurrentSelf.Sector3 -
+							this.sectorTimesCurrentSelf.Sector2, 's.S')}
+						{this.sectorTimesCurrentSelf.Sector3 -
+						 this.sectorTimesCurrentSelf.Sector2 <= 0 ? '' : 's'}
 					</div>
 				</div>
 			</div>
