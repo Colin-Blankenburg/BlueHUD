@@ -5,7 +5,7 @@
 
 -   Download and Extract [The dash folder](/public/dash.zip)
 -   Run dash.exe
--   Add `-webdev -webHudUrl=https://colin-blankenburg.github.io` to the game launch arguments
+-   Add `-webHudUrl=https://colin-blankenburg.github.io` to the game launch arguments
 -   Start the game
 
 ## for any questions, DM me on discord Username: bluebell2334 or tag me in the [Raceroom discord](https://discord.gg/raceroom)
