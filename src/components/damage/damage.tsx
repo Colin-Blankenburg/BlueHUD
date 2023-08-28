@@ -51,7 +51,7 @@ export default class Damage extends React.Component<IProps, {}> {
 						<div
 							className={classNames('part engine', {
 								bad: this.carDamage.Engine < 1,
-								broken: this.carDamage.Engine < 0.5
+								broken: this.carDamage.Engine === 0
 							})}
 						>
 							<div className="label">{_('Engine')}</div>
@@ -71,7 +71,7 @@ export default class Damage extends React.Component<IProps, {}> {
 						<div
 							className={classNames('part transmission', {
 								bad: this.carDamage.Transmission < 1,
-								broken: this.carDamage.Transmission < 0.5
+								broken: this.carDamage.Transmission === 0
 							})}
 						>
 							<div className="label">{_('Transmission')}</div>
@@ -92,7 +92,7 @@ export default class Damage extends React.Component<IProps, {}> {
 						<div
 							className={classNames('part aerodynamics', {
 								bad: this.carDamage.Aerodynamics < 1,
-								broken: this.carDamage.Aerodynamics < 0.5
+								broken: this.carDamage.Aerodynamics === 0
 							})}
 						>
 							<div className="label">{_('Aerodynamics')}</div>
@@ -113,7 +113,7 @@ export default class Damage extends React.Component<IProps, {}> {
 						<div
 							className={classNames('part suspension', {
 								bad: this.carDamage.Suspension < 1,
-								broken: this.carDamage.Suspension < 0.5
+								broken: this.carDamage.Suspension === 0
 							})}
 						>
 							<div className="label">{_('Suspension')}</div>
