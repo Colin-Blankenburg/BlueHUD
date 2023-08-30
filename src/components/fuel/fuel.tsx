@@ -6,7 +6,6 @@ import {
 	INVALID
 } from './../../lib/utils';
 import { action, observable} from 'mobx';
-import { IDriverData } from './../../types/r3eTypes';
 import { IWidgetSetting } from '../app/app';
 import { observer } from 'mobx-react';
 import r3e, { registerUpdate, unregisterUpdate } from '../../lib/r3e';
@@ -14,9 +13,6 @@ import React from 'react';
 import style from './fuel.scss';
 interface IProps extends React.HTMLAttributes<HTMLDivElement> {
 	settings: IWidgetSetting;
-}
-interface IDriverInfo {
-	meta: IDriverData;
 }
 @observer
 export default class Fuel extends React.Component<IProps, {}> {
@@ -35,6 +31,10 @@ export default class Fuel extends React.Component<IProps, {}> {
 	@observable
 	fuelUseActive = INVALID;
 	@observable
+	completedLaps = INVALID;
+	@observable
+	leaderFinish = INVALID;
+	@observable
 	fuelTimeLeft = INVALID;
 	@observable
 	lapsLeft = INVALID;
@@ -43,11 +43,11 @@ export default class Fuel extends React.Component<IProps, {}> {
 	fuel0LapsAgo = INVALID;
 	fuel1LapsAgo = INVALID;
 	@observable
-	driversData: IDriverInfo[] = [];
-	@observable
 	leaderLapDistance = INVALID;
 	@observable
 	leaderCompletedLaps = INVALID;
+	@observable
+	position = INVALID;
 	@observable
 	delta = INVALID;
 	constructor(props: IProps) {
@@ -63,6 +63,8 @@ export default class Fuel extends React.Component<IProps, {}> {
 	@action
 	private update = () => {
 		this.fuelPerLap = r3e.data.FuelPerLap;
+		this.position = r3e.data.Position;
+		this.completedLaps = r3e.data.CompletedLaps;
 		this.fuelUseActive = r3e.data.FuelUseActive;
 		this.fuelLeft = r3e.data.FuelLeft;
 		this.timeLeft = r3e.data.SessionTimeRemaining;
@@ -76,12 +78,51 @@ export default class Fuel extends React.Component<IProps, {}> {
 			 '--' :
 			(this.lapStartFuelLevel(1)
 			- this.lapStartFuelLevel(0)).toFixed(2);
-		this.getLeaderData;
+		this.leaderCompletedLaps = r3e.data.DriverData[0].CompletedLaps;
+		this.leaderFinish = r3e.data.DriverData[0].FinishStatus;
+		this.leaderLapDistance = r3e.data.DriverData[0].LapDistance;
 		this.fuelEstimated = this.lapsToFinish() * this.fuelPerLap;
 		this.delta = this.fuelEstimated - this.fuelLeft;
 	};
 
 	private lapsToFinish() {
+		const fraction = r3e.data.LapDistanceFraction ===
+		-1 ? 0 : r3e.data.LapDistanceFraction;
+		const leaderFraction = this.position === 1 ? fraction :
+		this.leaderLapDistance / r3e.data.LayoutLength;
+		let leaderLapsLeft: any;
+		if (this.leaderFinish === 1) {
+			return 1 - fraction;
+		}
+		if (this.timeLeft !== -1) {
+			let referenceTime: any;
+			const leaderBestLap = r3e.data.LapTimeBestLeader;
+			const bestLap = r3e.data.LapTimeBestSelf;
+			if (leaderBestLap > 0 && this.leaderCompletedLaps > 1) {
+				referenceTime = leaderBestLap;
+			} else if (bestLap > 0 && this.completedLaps) {
+				referenceTime = bestLap;
+			}
+			leaderLapsLeft = Math.ceil(this.timeLeft / referenceTime + leaderFraction);
+			if (this.position === 1) {
+				return leaderLapsLeft - fraction;
+			}
+			if (this.completedLaps === this.leaderCompletedLaps) {
+				return (leaderLapsLeft - fraction);
+			}
+			return leaderLapsLeft + 1 - fraction;
+		}
+		const laps = r3e.data.NumberOfLaps;
+		if (laps === -1) {
+			return -1;
+		}
+		if (this.leaderCompletedLaps === -1) {
+			return -1;
+		}
+		return laps - this.leaderCompletedLaps - fraction;
+	}
+
+/*	private lapsToFinish() {
 		const fraction = r3e.data.LapDistanceFraction ===
 		 -1 ? 0 : r3e.data.LapDistanceFraction;
 		if (this.timeLeft !== 0 ) {
@@ -106,13 +147,7 @@ export default class Fuel extends React.Component<IProps, {}> {
 		}
 		return laps - this.leaderCompletedLaps - fraction;
 	}
-
-	private getLeaderData(drivers: IDriverInfo[]) {
-		const leader = drivers[0];
-		this.leaderLapDistance = leader.meta.LapDistance;
-		this.leaderCompletedLaps = leader.meta.CompletedLaps;
-		}
-
+*/
 	private lapStartFuelLevel(lap: number) {
 		const completedLaps = r3e.data.CompletedLaps;
 		if (countIsIncreasing(completedLaps)) {

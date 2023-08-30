@@ -5,7 +5,7 @@ import {
 	formatTime
 } from '../../lib/utils';
 import { action, observable } from 'mobx';
-import { ITireData, IDriverData } from './../../types/r3eTypes';
+import { ITireData } from './../../types/r3eTypes';
 import { IWidgetSetting } from '../app/app';
 import { observer } from 'mobx-react';
 import r3e, { registerUpdate, unregisterUpdate } from '../../lib/r3e';
@@ -15,7 +15,10 @@ import style from './display.scss';
 interface IProps extends React.HTMLAttributes<HTMLDivElement> {
 	settings: IWidgetSetting;
 }
-
+interface IDriverData {
+	LapDistance: number;
+	Completedlaps: number;
+}
 @observer
 export default class Display extends React.Component<IProps, {}> {
 	@observable
@@ -26,8 +29,7 @@ export default class Display extends React.Component<IProps, {}> {
 		RearRight: 0
 	};
 	@observable
-	place: IDriverData[] = [];
-
+	driverData: IDriverData[] = [];
 	@observable
 	lapsLeft = INVALID;
 	@observable
@@ -40,6 +42,7 @@ export default class Display extends React.Component<IProps, {}> {
 	lastLapTime = '';
 	@observable
 	bestLapTime = '';
+	leaderLapDistance: any;
 
 	constructor(props: IProps) {
 		super(props);
@@ -59,6 +62,8 @@ export default class Display extends React.Component<IProps, {}> {
 		this.bestLapTime = formatTime(r3e.data.LapTimeBestSelf, 'm:ss.SSS');
 		this.incPoints = r3e.data.IncidentPoints;
 		this.incPointsMax = r3e.data.MaxIncidentPoints;
+		this.leaderLapDistance = r3e.data.DriverData[0].CompletedLaps;
+
 	};
 
 	render() {
@@ -71,10 +76,8 @@ export default class Display extends React.Component<IProps, {}> {
 			>
 				{/* Speed*/}
 				<div className="variable">
-					{('w')}
 					<p>{
-					this.lastLapTime
-					}</p>
+					this.leaderLapDistance}</p>
 					<p>{
 					this.bestLapTime
 					}</p>
