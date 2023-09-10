@@ -27,6 +27,7 @@ interface IProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 interface IDriverInfo {
 	isUser: boolean;
+	userId: number;
 	id: number;
 	name: string;
 	position: number;
@@ -34,6 +35,8 @@ interface IDriverInfo {
 	diff: string | number;
 	lapDiff: number;
 	classColor: string;
+	lastLapTime: string;
+	pitStatus: boolean;
 }
 @observer
 export default class PositionBar extends React.Component<IProps, {}> {
@@ -130,8 +133,8 @@ export default class PositionBar extends React.Component<IProps, {}> {
 				driverData
 					.concat(driverData, driverData)
 					.slice(
-						Math.max(0, start - 3),
-						Math.min(driverData.length * 3, start + 4)
+						Math.max(0, start - 4),
+						Math.min(driverData.length * 3, start + 5)
 					)
 			);
 		}
@@ -201,13 +204,21 @@ export default class PositionBar extends React.Component<IProps, {}> {
 
 		const driverData = {
 			isUser,
+			userId: driver.DriverInfo.UserId === -1 ? driver.DriverInfo.SlotId :
+			driver.DriverInfo.UserId,
 			id: driver.DriverInfo.SlotId,
 			name: base64ToString(driver.DriverInfo.Name),
 			position: driver.PlaceClass,
 			meta: driver,
 			lapDiff: driver.CompletedLaps - r3e.data.CompletedLaps,
 			diff: isUser ? this.getPlayerPositionText() : '',
-			classColor: getClassColor(driver.DriverInfo.ClassPerformanceIndex)
+			classColor: getClassColor(driver.DriverInfo.ClassPerformanceIndex),
+			lastLapTime: `${driver.SectorTimePreviousSelf.Sector3 > 0 ?
+						driver.SectorTimePreviousSelf.Sector3 > 60 ?
+						formatTime(driver.SectorTimePreviousSelf.Sector3, 'm:ss.S')
+						: formatTime(driver.SectorTimePreviousSelf.Sector3, 'ss.S')
+						: ''}`,
+		 pitStatus: driver.InPitlane < 1 ? false : true
 		};
 		this.userDriverData = driverData;
 		return driverData;
@@ -552,8 +563,13 @@ export class PositionEntry extends React.Component<IEntryProps, {}> {
 				>
 					{player.position}
 				</div>{' '}
-				<div className="name">{player.name}</div>
+				<div className="name">{`${player.name} ${player.pitStatus ? '[PIT]' :
+				 ''}`}</div>
 				<div className="diff mono">{player.diff}</div>
+				<div className="lastLapTime mono">{player.lastLapTime}</div>
+				<div className="profilePicture"> {
+				// tslint:disable-next-line:max-line-length
+				<img src={`https://game.raceroom.com/game/user_avatar/${player.userId}`} height="18px" />}</div>
 				<div
 					className="classStyle"
 					style={{

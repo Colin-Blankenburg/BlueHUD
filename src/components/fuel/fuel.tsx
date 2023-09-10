@@ -19,7 +19,7 @@ export default class Fuel extends React.Component<IProps, {}> {
 	@observable
 	fuelPerLap = INVALID;
 	@observable
-	fuelLastLap = '';
+	fuelLastLap = INVALID;
 	@observable
 	fuelLeft = INVALID;
 	@observable
@@ -62,7 +62,8 @@ export default class Fuel extends React.Component<IProps, {}> {
 
 	@action
 	private update = () => {
-		this.fuelPerLap = r3e.data.FuelPerLap;
+		this.fuelPerLap = this.fuelLastLap < 0 ?
+		(this.fuelLastLap + r3e.data.FuelPerLap) / 2 : r3e.data.FuelPerLap;
 		this.position = r3e.data.Position;
 		this.completedLaps = r3e.data.CompletedLaps;
 		this.fuelUseActive = r3e.data.FuelUseActive;
@@ -75,9 +76,9 @@ export default class Fuel extends React.Component<IProps, {}> {
 		this.fuelLastLap =
 		this.lapStartFuelLevel(1)
 		- this.lapStartFuelLevel(0) <= 0 ?
-			 '--' :
+			 -1 :
 			(this.lapStartFuelLevel(1)
-			- this.lapStartFuelLevel(0)).toFixed(2);
+			- this.lapStartFuelLevel(0));
 		this.leaderCompletedLaps = r3e.data.DriverData[0].CompletedLaps;
 		this.leaderFinish = r3e.data.DriverData[0].FinishStatus;
 		this.leaderLapDistance = r3e.data.DriverData[0].LapDistance;
@@ -97,10 +98,11 @@ export default class Fuel extends React.Component<IProps, {}> {
 		if (this.timeLeft !== -1) {
 			let referenceTime: any;
 			const leaderBestLap = r3e.data.LapTimeBestLeader;
-			const bestLap = r3e.data.LapTimeBestSelf;
-			if (leaderBestLap > 0 && this.leaderCompletedLaps > 1) {
+			const bestLap = r3e.data.LapTimeBestSelf < 0 || this.completedLaps > 0 ?
+			r3e.data.LapTimePreviousSelf : r3e.data.LapTimeBestSelf;
+			if (leaderBestLap > 0 && this.leaderCompletedLaps > 0) {
 				referenceTime = leaderBestLap;
-			} else if (bestLap > 0 && this.completedLaps) {
+			} else if (bestLap > 0 && this.completedLaps > 0) {
 				referenceTime = bestLap;
 			}
 			leaderLapsLeft = Math.ceil(this.timeLeft / referenceTime + leaderFraction);
@@ -122,32 +124,6 @@ export default class Fuel extends React.Component<IProps, {}> {
 		return laps - this.leaderCompletedLaps - fraction;
 	}
 
-/*	private lapsToFinish() {
-		const fraction = r3e.data.LapDistanceFraction ===
-		 -1 ? 0 : r3e.data.LapDistanceFraction;
-		if (this.timeLeft !== 0 ) {
-			let referenceTime: any;
-			const leaderBestLap = r3e.data.LapTimeBestLeader;
-			const bestLap = r3e.data.LapTimeBestSelf;
-			if (leaderBestLap > 0 ) {
-				referenceTime = leaderBestLap;
-			} else if (bestLap > 0) {
-				referenceTime = bestLap;
-			}
-			return Math.ceil(this.timeLeft / referenceTime + this.leaderLapDistance)
-					- fraction + (this.leaderLapDistance < fraction ? 1 : 0) +
-					(r3e.data.SessionLengthFormat === 2 ? 1 : 0);
-		}
-		const laps = r3e.data.NumberOfLaps;
-		if (laps === -1) {
-			return -1;
-		}
-		if (this.leaderCompletedLaps === -1) {
-			return -1;
-		}
-		return laps - this.leaderCompletedLaps - fraction;
-	}
-*/
 	private lapStartFuelLevel(lap: number) {
 		const completedLaps = r3e.data.CompletedLaps;
 		if (countIsIncreasing(completedLaps)) {
@@ -175,7 +151,7 @@ export default class Fuel extends React.Component<IProps, {}> {
 						</div>
 						<div className="fuelLastLap">
 							{('Fuel last lap: ')}
-							{this.fuelLastLap}
+							{this.fuelLastLap === -1 ? '--' : this.fuelLastLap.toFixed(2)}
 							{('L')}
 						</div>
 						<div className="fuelRemaining">

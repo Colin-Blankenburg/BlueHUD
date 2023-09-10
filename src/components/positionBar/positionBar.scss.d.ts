@@ -7,6 +7,8 @@ declare const styles: {
   readonly "position": string;
   readonly "name": string;
   readonly "diff": string;
+  readonly "lastLapTime": string;
+  readonly "profilePicture": string;
   readonly "isUser": string;
   readonly "classStyle": string;
   readonly "sessionTime": string;
