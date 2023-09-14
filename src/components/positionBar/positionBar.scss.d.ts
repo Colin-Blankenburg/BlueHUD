@@ -21,6 +21,7 @@ declare const styles: {
   readonly "lapping": string;
   readonly "sameLap": string;
   readonly "lapped": string;
+  readonly "notRaceSession": string;
 };
 export = styles;
 

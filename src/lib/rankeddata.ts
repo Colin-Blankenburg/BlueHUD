@@ -1,7 +1,5 @@
 
-import r3e from './r3e';
-
-export let userData: IRankedData[] = [];
+import r3e, {} from './r3e';
 
 interface IRankedData {
 	UserId: number;
@@ -16,39 +14,44 @@ interface IRankedData {
 	Position: number;
 }
 
-/*async function updateEntry(position: number): Promise<void> {
-	userData[position] = await
-	getDriverData(r3e.data.DriverData[position].DriverInfo.UserId);
-}*/
+export let rankedData: IRankedData[] = updateAvailableDrivers();
 
-async function updateAvailableDrivers(): Promise<void> {
-	for (let index = 0; index < 35; index++) {
-		(userData.length < (index + 1)
-		&& r3e.data.DriverData.length < (index + 1) ?
-		userData[index] =
-		await getDriverData(r3e.data.DriverData[index].DriverInfo.UserId)
-		: userData[index] = {
-			UserId: -1,
-			Username: '',
-			Fullname: '',
-			Rating: -1,
-			ActivityPoints: -1,
-			RacesCompleted: -1,
-			Reputation: -1,
-			Country: '',
-			Team: '',
-			Position: -1}
-		);
-	}
+function updateAvailableDrivers(): IRankedData[] {
+	const rankedDataInit: IRankedData[] = [];
+	for (let slotId = 0; slotId < r3e.data.NumCars; slotId++) {
+			rankedDataInit[slotId] = {
+				UserId: 5823316,
+				Username: 'BluePANDA2334',
+				Fullname: 'Colin Blankenburg',
+				Rating: 2182.412,
+				ActivityPoints: 5,
+				RacesCompleted: 362,
+				Reputation: 97.492,
+				Country: 'DE',
+				Team: 'RR shenanigans',
+				Position: 15
+			};
+		}
+	return rankedDataInit;
+	// getDriverData();
 }
-
-updateAvailableDrivers();
-
-async function getDriverData(userId: number): Promise<any> {
+/*
+async function getDriverData(slotId: number): Promise<any> {
+	const userId = r3e.data.DriverData[getSlotPosition(slotId)].DriverInfo.UserId;
 	const url = `https://game.raceroom.com/multiplayer-rating/user/${userId}.json`;
-	alert(url);
 	const newUserData = await (await fetch
 		(url)
 	).json();
-	return newUserData;
+	rankedData[slotId] = newUserData;
 }
+
+function getSlotPosition(slotId: number): number {
+	let pos = -1;
+	for (let position = 0; position < r3e.data.NumCars - 1; position++) {
+		if (r3e.data.DriverData[position].DriverInfo.SlotId === slotId) {
+		pos = position;
+		}
+	}
+	return pos;
+}
+*/

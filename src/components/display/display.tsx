@@ -2,11 +2,9 @@ import {
 	classNames,
 	INVALID,
 	widgetSettings,
-	formatTime,
 	base64ToString
 } from '../../lib/utils';
 import { action, observable } from 'mobx';
-import { ITireData } from './../../types/r3eTypes';
 import { IWidgetSetting } from '../app/app';
 import { observer } from 'mobx-react';
 import r3e, { registerUpdate, unregisterUpdate } from '../../lib/r3e';
@@ -16,46 +14,35 @@ import style from './display.scss';
 interface IProps extends React.HTMLAttributes<HTMLDivElement> {
 	settings: IWidgetSetting;
 }
-interface IDriverData {
-	LapDistance: number;
-	Completedlaps: number;
+
+interface IRankedData {
+	UserId: number;
+	Username: string;
+	Fullname: string;
+	Rating: number;
+	ActivityPoints: number;
+	RacesCompleted: number;
+	Reputation: number;
+	Country: string;
+	Team: string;
+	Position: number;
 }
 @observer
 export default class Display extends React.Component<IProps, {}> {
 	@observable
-	rideHeight: ITireData<number> = {
-		FrontLeft: 0,
-		FrontRight: 0,
-		RearLeft: 0,
-		RearRight: 0
-	};
-	@observable
-	driverDataObject: IDriverData[] = [];
-	@observable
 	position = r3e.data.Position - 1;
-	@observable
-	selfRating = INVALID;
-	@observable
-	lapsLeft = INVALID;
-	@observable
-	timeLeft = INVALID;
-	@observable
-	incPoints = INVALID;
-	@observable
-	incPointsMax = INVALID;
-	@observable
-	lastLapTime = '';
-	@observable
-	bestLapTime = '';
-	leaderLapDistance: any;
-	@observable
-	name = '';
 	@observable
 	id = INVALID;
 	@observable
 	urlProfileImage = '';
 	@observable
-	urlDriverData = '';
+	name = '';
+	@observable
+	hasBeenUpdated = false;
+	@observable
+	slotId = INVALID;
+	@observable
+	rankedData: IRankedData[] = this.updateAvailableDrivers();
 
 	constructor(props: IProps) {
 		super(props);
@@ -70,28 +57,65 @@ export default class Display extends React.Component<IProps, {}> {
 	@action
 	private update = () => {
 		this.position = r3e.data.Position - 1;
-		this.lapsLeft = r3e.data.FuelLeft / r3e.data.FuelPerLap;
-		this.rideHeight = r3e.data.Player.RideHeight;
-		this.timeLeft = this.lapsLeft * r3e.data.LapTimeBestSelf;
-		this.lastLapTime = formatTime(r3e.data.LapTimePreviousSelf, 'm:ss.SSS');
-		this.bestLapTime = formatTime(r3e.data.LapTimeBestSelf, 'm:ss.SSS');
-		this.incPoints = r3e.data.IncidentPoints;
-		this.incPointsMax = r3e.data.MaxIncidentPoints;
-		this.leaderLapDistance = r3e.data.DriverData[0].CompletedLaps;
 		this.name = base64ToString(
 			r3e.data.DriverData[this.position].DriverInfo.Name
 		);
 		this.id = r3e.data.DriverData[this.position].DriverInfo.UserId;
 		this.urlProfileImage =
 		`https://game.raceroom.com/game/user_avatar/${this.id}`;
+		this.slotId = r3e.data.DriverData[this.position].DriverInfo.SlotId;
+		this.name = this.rankedData[this.slotId].Fullname;
 	};
 
-	render() {
+ private updateAvailableDrivers(): IRankedData[] {
+	const rankedDataInit: IRankedData[] = [];
+	const basicInfo: IRankedData = {
+		UserId: -1,
+		Username: '-',
+		Fullname: '-',
+		Rating: 1500,
+		ActivityPoints: 5,
+		RacesCompleted: 1,
+		Reputation: 70,
+		Country: '-',
+		Team: '-',
+		Position: 1
+	};
+	for (let slotId = 0; slotId < r3e.data.NumCars; slotId++) {
+			rankedDataInit[slotId] = basicInfo;
+		}
+	// this.getAllDriverData();
+	return rankedDataInit;
+}
+/*
+ private async getAllDriverData(): Promise<any> {
+	for (let slotId = 0; slotId < r3e.data.NumCars ; slotId++) {
+		const userId =
+		r3e.data.DriverData[this.getSlotPosition(slotId)].DriverInfo.UserId;
+		const url =
+		`https://game.raceroom.com/multiplayer-rating/user/${userId}.json`;
+		const newUserData = await (await fetch
+			(url)
+		).json();
+		this.rankedData[slotId] = newUserData;
+	}
+}
+
+ private getSlotPosition(slotId: number): number {
+	let pos = -1;
+	for (let position = 0; position < r3e.data.NumCars - 1; position++) {
+		if (r3e.data.DriverData[position].DriverInfo.SlotId === slotId) {
+		pos = position;
+		}
+	}
+	return pos;
+ }
+*/
+ render() {
 		return (
 			<div
 				{...widgetSettings(this.props)}
 				className={classNames(style.display, this.props.className, {
-					shouldShow: this.lapsLeft !== INVALID
 				})}
 			>
 				{/* Speed*/}
@@ -99,6 +123,7 @@ export default class Display extends React.Component<IProps, {}> {
 					<p>{this.name}</p>
 					<p>{this.id}</p>
 					<p>{<img src={this.urlProfileImage} height="50px" />}</p>
+					<p>{this.name}</p>
 				</div>
 			</div>
 		);

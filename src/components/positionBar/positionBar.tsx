@@ -114,7 +114,6 @@ export default class PositionBar extends React.Component<IProps, {}> {
 		this.pitState = r3e.data.PitState;
 		this.classDriverCount = 0;
 		this.playerCount = r3e.data.DriverData.length;
-
 		let driverData = r3e.data.DriverData.map(this.formatDriverData).filter(
 			this.filterDriverData
 		);
@@ -204,7 +203,7 @@ export default class PositionBar extends React.Component<IProps, {}> {
 
 		const driverData = {
 			isUser,
-			userId: driver.DriverInfo.UserId === -1 ? driver.DriverInfo.SlotId :
+			userId: driver.DriverInfo.UserId === -1 ? 3 :
 			driver.DriverInfo.UserId,
 			id: driver.DriverInfo.SlotId,
 			name: base64ToString(driver.DriverInfo.Name),
@@ -217,8 +216,8 @@ export default class PositionBar extends React.Component<IProps, {}> {
 						driver.SectorTimePreviousSelf.Sector3 > 60 ?
 						formatTime(driver.SectorTimePreviousSelf.Sector3, 'm:ss.S')
 						: formatTime(driver.SectorTimePreviousSelf.Sector3, 'ss.S')
-						: ''}`,
-		 pitStatus: driver.InPitlane < 1 ? false : true
+						: '-'}s`,
+			pitStatus: driver.InPitlane < 1 ? false : true
 		};
 		this.userDriverData = driverData;
 		return driverData;
@@ -550,7 +549,8 @@ export class PositionEntry extends React.Component<IEntryProps, {}> {
 					isUser: player.isUser,
 					lapping: player.lapDiff < 0,
 					sameLap: player.lapDiff === 0,
-					lapped: player.lapDiff > 0
+					lapped: player.lapDiff > 0,
+					notRaceSession: r3e.data.SessionType !== ESession.Race
 				})}
 			>
 				<div
@@ -563,8 +563,8 @@ export class PositionEntry extends React.Component<IEntryProps, {}> {
 				>
 					{player.position}
 				</div>{' '}
-				<div className="name">{`${player.name} ${player.pitStatus ? '[PIT]' :
-				 ''}`}</div>
+				<div className="name">{`${player.pitStatus ? '[PIT]' :
+				 ''} ${player.name} `}</div>
 				<div className="diff mono">{player.diff}</div>
 				<div className="lastLapTime mono">{player.lastLapTime}</div>
 				<div className="profilePicture"> {

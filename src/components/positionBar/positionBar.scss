@@ -205,6 +205,7 @@
 		.diff {
 			display: inline-block;
 		}
+
 		.lastLapTime {
 			display: inline;
 			position: absolute;
@@ -220,6 +221,11 @@
 		}
 		&.lapped {
 			color: #b03a4a;
+		}
+		&.notRaceSession {
+			.diff{
+			display: none;
+			}
 		}
 
 		&.isUser {
