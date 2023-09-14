@@ -14,7 +14,6 @@ import style from './display.scss';
 interface IProps extends React.HTMLAttributes<HTMLDivElement> {
 	settings: IWidgetSetting;
 }
-
 interface IRankedData {
 	UserId: number;
 	Username: string;
@@ -38,11 +37,15 @@ export default class Display extends React.Component<IProps, {}> {
 	@observable
 	name = '';
 	@observable
+	rating = INVALID;
+	@observable
+	reputation = INVALID;
+	@observable
 	hasBeenUpdated = false;
 	@observable
 	slotId = INVALID;
 	@observable
-	rankedData: IRankedData[] = this.updateAvailableDrivers();
+	fetchrankedData: IRankedData[] = this.updateAvailableDrivers();
 
 	constructor(props: IProps) {
 		super(props);
@@ -56,15 +59,17 @@ export default class Display extends React.Component<IProps, {}> {
 
 	@action
 	private update = () => {
+		this.slotId = r3e.data.DriverData[this.position].DriverInfo.SlotId;
 		this.position = r3e.data.Position - 1;
 		this.name = base64ToString(
 			r3e.data.DriverData[this.position].DriverInfo.Name
 		);
-		this.id = r3e.data.DriverData[this.position].DriverInfo.UserId;
+		this.id = this.fetchrankedData[this.slotId].UserId;
 		this.urlProfileImage =
 		`https://game.raceroom.com/game/user_avatar/${this.id}`;
-		this.slotId = r3e.data.DriverData[this.position].DriverInfo.SlotId;
-		this.name = this.rankedData[this.slotId].Fullname;
+		this.name = this.fetchrankedData[this.slotId].Fullname;
+		this.rating = this.fetchrankedData[this.slotId].Rating;
+		this.reputation = this.fetchrankedData[this.slotId].Reputation;
 	};
 
  private updateAvailableDrivers(): IRankedData[] {
@@ -84,33 +89,18 @@ export default class Display extends React.Component<IProps, {}> {
 	for (let slotId = 0; slotId < r3e.data.NumCars; slotId++) {
 			rankedDataInit[slotId] = basicInfo;
 		}
-	// this.getAllDriverData();
+	this.getAllDriverData();
 	return rankedDataInit;
 }
-/*
- private async getAllDriverData(): Promise<any> {
-	for (let slotId = 0; slotId < r3e.data.NumCars ; slotId++) {
-		const userId =
-		r3e.data.DriverData[this.getSlotPosition(slotId)].DriverInfo.UserId;
-		const url =
-		`https://game.raceroom.com/multiplayer-rating/user/${userId}.json`;
-		const newUserData = await (await fetch
-			(url)
-		).json();
-		this.rankedData[slotId] = newUserData;
-	}
-}
 
- private getSlotPosition(slotId: number): number {
-	let pos = -1;
-	for (let position = 0; position < r3e.data.NumCars - 1; position++) {
-		if (r3e.data.DriverData[position].DriverInfo.SlotId === slotId) {
-		pos = position;
-		}
+	private async getAllDriverData(): Promise<any> {
+		const url =
+		'https://game.raceroom.com/multiplayer-rating/ratings.json';
+		const newUserData: IRankedData[] = await (await fetch( url )).json();
+		this.fetchrankedData[0] = await (newUserData
+		[newUserData.findIndex((element) => element.UserId === 5823316)]);
 	}
-	return pos;
- }
-*/
+
  render() {
 		return (
 			<div
@@ -120,10 +110,11 @@ export default class Display extends React.Component<IProps, {}> {
 			>
 				{/* Speed*/}
 				<div className="variable">
-					<p>{this.name}</p>
+					<p>{this}</p>
 					<p>{this.id}</p>
 					<p>{<img src={this.urlProfileImage} height="50px" />}</p>
-					<p>{this.name}</p>
+					<p>{this.rating}</p>
+					<p>{this.reputation}</p>
 				</div>
 			</div>
 		);

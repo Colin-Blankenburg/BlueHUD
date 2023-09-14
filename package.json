@@ -4,7 +4,7 @@
 	"description": "BlueHUD Colin Blankenburg",
 	"private": true,
 	"scripts": {
-		"start": "set NODE_OPTIONS=--openssl-legacy-provider && node .\\node_modules\\ts-node\\dist\\bin.js .\\server\\server",
+		"start": "set NODE_OPTIONS=--openssl-legacy-provider && node .\\node_modules\\ts-node\\dist\\bin.js .\\server\\server --inspect",
 		"build": "set NODE_OPTIONS=--openssl-legacy-provider && .\\node_modules\\.bin\\webpack --env=production --progress --profile",
 		"translations:extract": "set NODE_OPTIONS=--openssl-legacy-provider && node .\\node_modules\\ts-node\\dist\\bin.js .\\server\\tools\\localization\\extractTranslations",
 		"translations:generate": "set NODE_OPTIONS=--openssl-legacy-provider && node .\\node_modules\\ts-node\\dist\\bin.js .\\server\\tools\\localization\\generateTranslations",

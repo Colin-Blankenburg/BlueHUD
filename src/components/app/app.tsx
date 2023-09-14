@@ -395,7 +395,7 @@ export default class App extends React.Component<IProps> {
 			delete localStorage.appSettings;
 
 			setTimeout(() => {
-				window.location.reload(true);
+				window.location.reload();
 			}, 3000);
 		};
 	}
