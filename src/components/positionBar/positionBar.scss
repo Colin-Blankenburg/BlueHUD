@@ -106,7 +106,9 @@
 					display: none;
 				}
 			}
-
+			.ratingAndReputation {
+				display: none;
+			}
 			.classStyle {
 				display: block;
 				content: '';
@@ -160,9 +162,9 @@
 	background: rgba(0, 0, 0, 0.7);
 	box-shadow: 0 0 20px rgba(0, 0, 0, 0.2) inset;
 
-	top: 75%;
+	top: 74%;
 	left: 12%;
-	width: 310px;
+	width: 380px;
 	transform-origin: bottom right;
 	border-radius: 5px;
 	.player {
@@ -210,6 +212,11 @@
 			display: inline;
 			position: absolute;
 			right: 5px;
+		}
+		.ratingAndReputation {
+			display: inline;
+			position: absolute;
+			right: 60px;
 		}
 		text-shadow: 2px 2px 2px rgba(0, 0, 0, 1);
 

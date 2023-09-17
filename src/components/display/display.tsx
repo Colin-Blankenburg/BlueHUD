@@ -29,6 +29,8 @@ interface IRankedData {
 @observer
 export default class Display extends React.Component<IProps, {}> {
 	@observable
+	fetchrankedData: IRankedData[] = this.updateAvailableDrivers();
+	@observable
 	position = r3e.data.Position - 1;
 	@observable
 	id = INVALID;
@@ -44,8 +46,6 @@ export default class Display extends React.Component<IProps, {}> {
 	hasBeenUpdated = false;
 	@observable
 	slotId = INVALID;
-	@observable
-	fetchrankedData: IRankedData[] = this.updateAvailableDrivers();
 
 	constructor(props: IProps) {
 		super(props);
@@ -86,7 +86,8 @@ export default class Display extends React.Component<IProps, {}> {
 		Team: '-',
 		Position: 1
 	};
-	for (let slotId = 0; slotId < r3e.data.NumCars; slotId++) {
+	for (let slotId = 0; slotId <
+		(r3e.data.NumCars >= 36 ? r3e.data.NumCars : 36 ); slotId++) {
 			rankedDataInit[slotId] = basicInfo;
 		}
 	this.getAllDriverData();
@@ -110,11 +111,7 @@ export default class Display extends React.Component<IProps, {}> {
 			>
 				{/* Speed*/}
 				<div className="variable">
-					<p>{this}</p>
-					<p>{this.id}</p>
-					<p>{<img src={this.urlProfileImage} height="50px" />}</p>
-					<p>{this.rating}</p>
-					<p>{this.reputation}</p>
+					{}
 				</div>
 			</div>
 		);

@@ -10,6 +10,7 @@ declare const styles: {
   readonly "lastLapTime": string;
   readonly "profilePicture": string;
   readonly "isUser": string;
+  readonly "ratingAndReputation": string;
   readonly "classStyle": string;
   readonly "sessionTime": string;
   readonly "currentLap": string;
