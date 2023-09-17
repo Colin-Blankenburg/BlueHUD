@@ -310,7 +310,7 @@ export default class App extends React.Component<IProps> {
 		},
 		display: {
 			id: 'display',
-			enabled: true,
+			enabled: false,
 			zoom: 1,
 			name: __('Display'),
 			subSettings: {},

@@ -37,11 +37,27 @@ interface IDriverInfo {
 	classColor: string;
 	lastLapTime: string;
 	pitStatus: boolean;
+	rankedData: IRankedData;
+}
+interface IRankedData {
+	UserId: number;
+	Username: string;
+	Fullname: string;
+	Rating: number;
+	ActivityPoints: number;
+	RacesCompleted: number;
+	Reputation: number;
+	Country: string;
+	Team: string;
+	Position: number;
 }
 @observer
 export default class PositionBar extends React.Component<IProps, {}> {
 	@observable
 	drivers: IDriverInfo[] = [];
+
+	@observable
+	fetchrankedData: IRankedData[] = this.updateAvailableDrivers();
 
 	@observable
 	currentLap = INVALID;
@@ -63,6 +79,9 @@ export default class PositionBar extends React.Component<IProps, {}> {
 
 	@observable
 	position = INVALID;
+
+	@observable
+	strengthOfField = 1500;
 
 	@observable
 	sessionType = INVALID;
@@ -203,7 +222,7 @@ export default class PositionBar extends React.Component<IProps, {}> {
 
 		const driverData = {
 			isUser,
-			userId: driver.DriverInfo.UserId === -1 ? 3 :
+			userId: driver.DriverInfo.UserId === -1 || 0 ? 3 :
 			driver.DriverInfo.UserId,
 			id: driver.DriverInfo.SlotId,
 			name: base64ToString(driver.DriverInfo.Name),
@@ -217,11 +236,64 @@ export default class PositionBar extends React.Component<IProps, {}> {
 						formatTime(driver.SectorTimePreviousSelf.Sector3, 'm:ss.S')
 						: formatTime(driver.SectorTimePreviousSelf.Sector3, 'ss.S')
 						: '-'}s`,
-			pitStatus: driver.InPitlane < 1 ? false : true
+			pitStatus: driver.InPitlane < 1 ? false : true,
+			rankedData: this.fetchrankedData[driver.DriverInfo.SlotId]
 		};
 		this.userDriverData = driverData;
 		return driverData;
 	};
+
+	private updateAvailableDrivers(): IRankedData[] {
+		const rankedDataInit: IRankedData[] = [];
+		const basicInfo: IRankedData = {
+			UserId: -1,
+			Username: '-',
+			Fullname: '-',
+			Rating: 1500,
+			ActivityPoints: 5,
+			RacesCompleted: 1,
+			Reputation: 70,
+			Country: '-',
+			Team: '-',
+			Position: 1
+		};
+		for (let slotId = 0; slotId <
+			( r3e.data.NumCars * 2 ); slotId++) {
+				rankedDataInit[slotId] = basicInfo;
+			}
+		this.getAllDriverData();
+		return rankedDataInit;
+	}
+
+	private async getAllDriverData(): Promise<any> {
+		const url = 'https://game.raceroom.com/multiplayer-rating/ratings.json';
+		const newUserData: IRankedData[] = await (await fetch( url )).json();
+		let ratingSum = INVALID;
+		let driverCount = INVALID;
+		for (let slotId = 0; slotId < r3e.data.NumCars * 2; slotId++) {
+		 const userId = this.getUserIdFromSlot(slotId);
+		 const userIndex = newUserData.findIndex((element) =>
+		 element.UserId === userId);
+			if (userId !== -1 && userIndex !== -1 ) {
+				this.fetchrankedData[slotId] = (newUserData
+				[userIndex]);
+				ratingSum += this.fetchrankedData[slotId].Rating;
+				driverCount++;
+			}
+		}
+		this.updateSOF(ratingSum, driverCount + 1);
+	}
+
+	@action
+	private updateSOF(rat: number, drivers: number) {
+		this.strengthOfField = rat / drivers;
+	}
+
+	private getUserIdFromSlot(slotId: number): number {
+		const index = r3e.data.DriverData.findIndex((element) =>
+		element.DriverInfo.SlotId === slotId);
+		return index === -1 ? index : r3e.data.DriverData[index].DriverInfo.UserId;
+	}
 
 	private forceClassColorUpdate() {
 		r3e.data.DriverData.forEach((driver) => {
@@ -503,6 +575,27 @@ export default class PositionBar extends React.Component<IProps, {}> {
 					)}
 
 				{!this.props.relative &&
+					r3e.data.MaxIncidentPoints !== -1 && (
+						<div className="incidentPoints">
+							<span className="mono">
+								{`${r3e.data.IncidentPoints
+								 === -1 ? '-' : r3e.data.IncidentPoints}/${r3e.data.MaxIncidentPoints}`}
+							</span>
+							<div className="label">{('Incident Points')}</div>
+						</div>
+					)}
+
+				{!this.props.relative &&
+					r3e.data.MaxIncidentPoints !== -1 && (
+						<div className="SOF">
+							<span className="mono">
+								{this.strengthOfField.toFixed(0)}
+							</span>
+							<div className="label">{('SOF')}</div>
+						</div>
+					)}
+
+				{!this.props.relative &&
 					this.props.settings.subSettings.currentLap.enabled &&
 					this.maxLaps !== INVALID && (
 						<div className="currentLap">
@@ -546,7 +639,7 @@ export class PositionEntry extends React.Component<IEntryProps, {}> {
 		return (
 			<div
 				className={classNames('player', {
-					isUser: player.isUser,
+					isUser: false,
 					lapping: player.lapDiff < 0,
 					sameLap: player.lapDiff === 0,
 					lapped: player.lapDiff > 0,
@@ -567,6 +660,10 @@ export class PositionEntry extends React.Component<IEntryProps, {}> {
 				 ''} ${player.name} `}</div>
 				<div className="diff mono">{player.diff}</div>
 				<div className="lastLapTime mono">{player.lastLapTime}</div>
+				<div className="ratingAndReputation">{
+				`${player.rankedData.Rating.toFixed(0)} /
+				${player.rankedData.Reputation.toFixed(0)}`}
+				</div>
 				<div className="profilePicture"> {
 				// tslint:disable-next-line:max-line-length
 				<img src={`https://game.raceroom.com/game/user_avatar/${player.userId}`} height="18px" />}</div>
