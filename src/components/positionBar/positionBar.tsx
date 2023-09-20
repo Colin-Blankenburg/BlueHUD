@@ -57,7 +57,7 @@ export default class PositionBar extends React.Component<IProps, {}> {
 	drivers: IDriverInfo[] = [];
 
 	@observable
-	fetchrankedData: IRankedData[] = this.updateAvailableDrivers();
+	fetchrankedData: object = this.updateAvailableDrivers();
 
 	@observable
 	currentLap = INVALID;
@@ -243,8 +243,8 @@ export default class PositionBar extends React.Component<IProps, {}> {
 		return driverData;
 	};
 
-	private updateAvailableDrivers(): IRankedData[] {
-		const rankedDataInit: IRankedData[] = [];
+	private updateAvailableDrivers(): object {
+		const rankedDataInit = {};
 		const basicInfo: IRankedData = {
 			UserId: -1,
 			Username: '-',
@@ -258,7 +258,7 @@ export default class PositionBar extends React.Component<IProps, {}> {
 			Position: 1
 		};
 		for (let slotId = 0; slotId <
-			( r3e.data.NumCars * 2 ); slotId++) {
+			( 100 ); slotId++) {
 				rankedDataInit[slotId] = basicInfo;
 			}
 		this.getAllDriverData();
@@ -661,8 +661,10 @@ export class PositionEntry extends React.Component<IEntryProps, {}> {
 				<div className="diff mono">{player.diff}</div>
 				<div className="lastLapTime mono">{player.lastLapTime}</div>
 				<div className="ratingAndReputation">{
-				`${player.rankedData.Rating.toFixed(0)} /
-				${player.rankedData.Reputation.toFixed(0)}`}
+				`${player.rankedData === undefined ? 1500 :
+					player.rankedData.Rating.toFixed(0)} /
+				${player.rankedData === undefined ? 70 :
+					player.rankedData.Reputation.toFixed(0)}`}
 				</div>
 				<div className="profilePicture"> {
 				// tslint:disable-next-line:max-line-length
