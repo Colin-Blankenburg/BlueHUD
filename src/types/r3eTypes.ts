@@ -529,6 +529,8 @@ export interface IDriverData {
 	PtpState: EOvertakingAid;
 	PenaltyType: EPenaltyType;
 
+	EngineState: number;
+
 	// Based on the PenaltyType you can assume the reason is:
 
 	// DriveThroughPenaltyInvalid = 0,
@@ -582,7 +584,6 @@ export interface IDriverData {
 	PenaltyReason: number;
 
 	/** Reserved data */
-	Unused1: number;
 	Unused2: number;
 	Unused3: number;
 	Unused4: number;

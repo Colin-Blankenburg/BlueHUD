@@ -62,8 +62,7 @@ export default class Fuel extends React.Component<IProps, {}> {
 
 	@action
 	private update = () => {
-		this.fuelPerLap = this.fuelLastLap < 0 ?
-		(this.fuelLastLap + r3e.data.FuelPerLap) / 2 : r3e.data.FuelPerLap;
+		this.fuelPerLap = r3e.data.FuelPerLap;
 		this.position = r3e.data.Position;
 		this.completedLaps = r3e.data.CompletedLaps;
 		this.fuelUseActive = r3e.data.FuelUseActive;

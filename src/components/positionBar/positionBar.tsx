@@ -36,8 +36,9 @@ interface IDriverInfo {
 	lapDiff: number;
 	classColor: string;
 	lastLapTime: string;
-	pitStatus: boolean;
+	isInPit: boolean;
 	rankedData: IRankedData;
+	pitState: number;
 }
 interface IRankedData {
 	UserId: number;
@@ -236,8 +237,9 @@ export default class PositionBar extends React.Component<IProps, {}> {
 						formatTime(driver.SectorTimePreviousSelf.Sector3, 'm:ss.S')
 						: formatTime(driver.SectorTimePreviousSelf.Sector3, 'ss.S')
 						: '-'}s`,
-			pitStatus: driver.InPitlane < 1 ? false : true,
-			rankedData: this.fetchrankedData[driver.DriverInfo.SlotId]
+			isInPit: driver.InPitlane < 1 ? false : true,
+			rankedData: this.fetchrankedData[driver.DriverInfo.SlotId],
+			pitState: driver.PitStopStatus
 		};
 		this.userDriverData = driverData;
 		return driverData;
@@ -651,12 +653,15 @@ export class PositionEntry extends React.Component<IEntryProps, {}> {
 					style={{
 						color: this.props.relative
 							? player.classColor
+							: undefined,
+						background: !this.props.relative && player.pitState !== -1
+							? player.pitState === 2 ? '#060' : '#600'
 							: undefined
 					}}
 				>
 					{player.position}
 				</div>{' '}
-				<div className="name">{`${player.pitStatus ? '[PIT]' :
+				<div className="name">{`${player.isInPit ? '[PIT]' :
 				 ''} ${player.name} `}</div>
 				<div className="diff mono">{player.diff}</div>
 				<div className="lastLapTime mono">{player.lastLapTime}</div>
@@ -666,9 +671,15 @@ export class PositionEntry extends React.Component<IEntryProps, {}> {
 				${player.rankedData === undefined ? 70 :
 					player.rankedData.Reputation.toFixed(0)}`}
 				</div>
-				<div className="profilePicture"> {
+				<div
+					className="profilePicture"
+					style={{
+
+					}}
+				> {
 				// tslint:disable-next-line:max-line-length
-				<img src={`https://game.raceroom.com/game/user_avatar/${player.userId}`} height="18px" />}</div>
+				<img src={`https://game.raceroom.com/game/user_avatar/${player.userId}`} height="18px" />}
+				</div>
 				<div
 					className="classStyle"
 					style={{
